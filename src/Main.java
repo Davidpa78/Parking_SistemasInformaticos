@@ -10,6 +10,7 @@ public class Main {
         int recaudacion = 0;
         int [] coordenadas = new int[2];
         char [][] parking = new char[filas][columnas];
+        int parking_lleno = 0;
 
 
     inicializarParking(parking,filas,columnas);
@@ -46,9 +47,10 @@ public class Main {
                 break;
             case 2:
                 CogerCoordenadas(coordenadas);
-                if(ComprobarPosicion(parking, coordenadas)) {
+                if(ComprobarPosicionEntrada(parking, coordenadas)) {
                     parking[coordenadas[0]][coordenadas[1]] = 'C';
                     recaudacion += 5;
+                    parking_lleno ++;
                 }
 
                 else
@@ -57,9 +59,10 @@ public class Main {
                 break;
             case 3:
                 CogerCoordenadas(coordenadas);
-                if(ComprobarPosicion(parking, coordenadas)) {
+                if(ComprobarPosicionEntrada(parking, coordenadas)) {
                     parking[coordenadas[0]][coordenadas[1]] = 'M';
                     recaudacion += 3;
+                    parking_lleno++;
                 }
 
                 else
@@ -67,21 +70,34 @@ public class Main {
                 break;
             case 4:
                 CogerCoordenadas(coordenadas);
-                if(ComprobarPosicion(parking, coordenadas)) {
+                if(parking_lleno <= 24){
+                if(ComprobarPosicionEntrada(parking, coordenadas)) {
+
                     parking[coordenadas[0]][coordenadas[1]] = 'A';
                     recaudacion += 10;
+                    parking_lleno++;
                 }
-
                 else
-                    System.out.println("Posicion ocupada por vehículo o columnas");
+                    System.out.println("Posicion ocupada por vehículo o columnas");}
+
+                    else
+                        System.out.println("PARKING LLENO INTENTE TRAS SACAR ALGÚN VEHÍCULO");
+
                 break;
             case 5:
+                CogerCoordenadas(coordenadas);
+                if(ComprobarPosicionSalida(parking,coordenadas)){
+                    parking[coordenadas[0]][coordenadas[1]] = '\0';
+                }
+                else
+                    System.out.println("Introduce una posición con un vehículo existente");
 
                 break;
             case 6:
                 System.out.println("La recaudación del parking es de " + recaudacion);
                 break;
             case 7:
+                System.out.println("Gracias por usar el programa");
                 break;
                 default:
                     System.out.println("Solo números del 1 al 7");
@@ -123,12 +139,23 @@ public class Main {
                 }
             }
         }
-    private static boolean ComprobarPosicion(char [][] parking, int[] coordenadas) {
+    private static boolean ComprobarPosicionEntrada(char [][] parking, int[] coordenadas) {
 
             if (parking[coordenadas[0]][coordenadas[1]] == '\0')
                 return true;
             else
                 return false;
+
+
+
+    }
+
+    private static boolean ComprobarPosicionSalida(char [][] parking, int[] coordenadas) {
+
+        if ( parking[coordenadas[0]][coordenadas[1]] == 'C' || parking[coordenadas[0]][coordenadas[1]] == 'M' || parking[coordenadas[0]][coordenadas[1]] == 'A')
+            return true;
+        else
+            return false;
 
 
 
@@ -144,6 +171,10 @@ public class Main {
         return coordenadas;
 
     }
+
+
+
+
 
 
     }

@@ -5,7 +5,7 @@ public class Coches extends Vehiculos {
     String dni;
 
 
-    public boolean isElectrico() {
+    public boolean isElectrico(boolean b) {
         return electrico;
     }
 
@@ -26,5 +26,7 @@ public class Coches extends Vehiculos {
         this.electrico = electrico;
         this.dni = dni;
     }
+
+
 
 }

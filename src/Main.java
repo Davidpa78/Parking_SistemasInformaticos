@@ -1,10 +1,12 @@
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
+     static Scanner escaner = new Scanner(System.in);
 
     public static void main (String[] args){
-        Scanner escaner = new Scanner(System.in);
+       ;
         int filas = 5;
         int columnas = 10;
         int n_switch = 0;
@@ -12,9 +14,33 @@ public class Main {
         int [] coordenadas = new int[2];
         char [][] parking = new char[filas][columnas];
         int parking_lleno = 0;
+        int contador_coches =0;
+        int contador_motos = 0;
+        int contador_autobuses = 0;
+
+        Motos motos[] = new Motos[100];
+        Coches coches[] = new Coches[100];
+        Autobus autobuses[] = new Autobus[100];
 
 
-    inicializarParking(parking,filas,columnas);
+        //INICIALIZAR ARRAYS
+        for (int i = 0; i< motos.length; i++){
+            Autobus autobus = new Autobus("","","",0,"");
+            autobuses[i] = autobus;
+
+        }
+        for (int i = 0; i< motos.length; i++){
+            Motos moto = new Motos("","","",0);
+            motos[i] = moto;
+
+        }
+        for (int i = 0; i< coches.length; i++){
+            Coches coche = new Coches("","","",false,"");
+            coches[i] = coche;
+
+        }
+
+        inicializarParking(parking,filas,columnas);
 
 
     do {
@@ -52,14 +78,15 @@ try {
                 break;
             case 2:
                 CogerCoordenadas(coordenadas);
+                Integer integer4 = ComprobarPosicionEntrada(parking,coordenadas);
                 if(parking_lleno < 24){
-                    if(ComprobarPosicionEntrada(parking, coordenadas)) {
-
+                    if(integer4 == 0) {
                         parking[coordenadas[0]][coordenadas[1]] = 'C';
+                        Añadircoche(coches,contador_coches);
                         recaudacion += 5;
                         parking_lleno++;
                     }
-                    else
+                    else if (integer4 == 1)
                         System.out.println("Posicion ocupada por vehículo o columnas");
                 }
 
@@ -68,28 +95,31 @@ try {
                 break;
             case 3:
                 CogerCoordenadas(coordenadas);
+                Integer integer3 = ComprobarPosicionEntrada(parking,coordenadas);
                 if(parking_lleno < 24){
-                if(ComprobarPosicionEntrada(parking, coordenadas)) {
+                if(integer3 == 0) {
+                    Añadirmoto(motos,contador_motos);
                     parking[coordenadas[0]][coordenadas[1]] = 'M';
                     recaudacion += 3;
                     parking_lleno++;
                 }
 
-                else
+                else if(integer3 == 1)
                     System.out.println("Posicion ocupada por vehículo o columnas");
                 }else
                     System.out.println("PARKING LLENO INTENTE TRAS SACAR ALGÚN VEHÍCULO");
                 break;
             case 4:
                 CogerCoordenadas(coordenadas);
+                Integer integer1 = ComprobarPosicionEntrada(parking,coordenadas);
                 if(parking_lleno < 24){
-                if(ComprobarPosicionEntrada(parking, coordenadas)) {
-
+                if(integer1 == 0) {
+                    Añadirautobus(autobuses,contador_autobuses);
                     parking[coordenadas[0]][coordenadas[1]] = 'A';
                     recaudacion += 10;
                     parking_lleno++;
                 }
-                else
+                else if(integer1 == 1)
                     System.out.println("Posicion ocupada por vehículo o columnas");}
 
                     else
@@ -98,11 +128,11 @@ try {
                 break;
             case 5:
                 CogerCoordenadas(coordenadas);
-                Integer integer = ComprobarPosicionSalida(parking,coordenadas);
-                if(integer == 0){
+                Integer integer2 = ComprobarPosicionSalida(parking,coordenadas);
+                if(integer2 == 0){
                     parking[coordenadas[0]][coordenadas[1]] = '\0';
                 }
-                else if (integer == 1)
+                else if (integer2 == 1)
                     System.out.println("Introduce una posición con un vehículo existente");
 
                 break;
@@ -151,16 +181,16 @@ try {
                 }
             }
         }
-    private static boolean ComprobarPosicionEntrada(char [][] parking, int[] coordenadas) {
+    private static Integer ComprobarPosicionEntrada(char [][] parking, int[] coordenadas) {
 
         try {
             if (parking[coordenadas[0]][coordenadas[1]] == '\0')
-                return true;
+                return 0;
             else
-                return false;
+                return 1;
         }catch (Exception ex){
             System.out.println("Coordenadas fuera de los límites del parking");
-            return false;
+            return 2;
         }
     }
     private static Integer ComprobarPosicionSalida(char [][] parking, int[] coordenadas) {
@@ -190,6 +220,59 @@ try {
         return coordenadas;
         }
     }
+
+    private static void Añadirmoto (Motos motos[], int contador){
+
+        try {
+        System.out.println("Introduce la matrícula");
+        motos[contador].setMatricula(escaner.nextLine());
+        System.out.println("Introduce la marca: ");
+        motos[contador].setMarca(escaner.nextLine());
+        System.out.println("Introduce el modelo: ");
+        motos[contador].setModelo(escaner.nextLine());
+        System.out.println("Introduce la cilindrada: ");
+        motos[contador].setCilindrada(escaner.nextInt());
+        contador++;
+        }catch (Exception ex) { System.out.println("Valor inválido");}
+    }
+
+    private static void Añadircoche (Coches coches[], int contador){
+
+
+try{
+    System.out.println("Introduce la matrícula: ");
+    coches[contador].setMatricula(escaner.nextLine());
+    System.out.println("Introduce la marca: ");
+    coches[contador].setMarca(escaner.nextLine());
+    System.out.println("Introduce el modelo: ");
+    coches[contador].setModelo(escaner.nextLine());
+    System.out.println("Introduce tu DNI: ");
+    coches[contador].setDni(escaner.nextLine());
+    System.out.println("¿Es un coche eléctrico? (true=electrico, false=combustión)");
+    coches[contador].setElectrico(escaner.nextBoolean());
+    contador++;
+    }catch ( Exception ex) {
+    System.out.println("Valor invalido");
+}
+
+}
+
+    private static void Añadirautobus (Autobus autobuses[], int contador){
+        try {
+        System.out.println("Introduce la matrícula: ");
+        autobuses[contador].setMatricula(escaner.nextLine());
+        System.out.println("Introduce la marca: ");
+        autobuses[contador].setMarca(escaner.nextLine());
+        System.out.println("Introduce el modelo: ");
+        autobuses[contador].setModelo(escaner.nextLine());
+        System.out.println("Introduce la compañía: ");
+        autobuses[contador].setCompañía(escaner.nextLine());
+        System.out.println("Introduce el número de plazas: ");
+        autobuses[contador].setNumero_plazas(escaner.nextInt());
+        contador++;
+        }catch (Exception ex) { System.out.println("Valor inválido");}
+    }
+
 
 }
 

@@ -1,9 +1,9 @@
-import javax.lang.model.type.NullType;
+
 
 public class Motos extends Vehiculos {
 
 
-        int cilindrada;
+    int cilindrada;
 
 
     public int getCilindrada() {
